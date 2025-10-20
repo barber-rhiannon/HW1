@@ -45,13 +45,16 @@ python3 DES.py <your_input_file.txt>
 ```
 
 The output file will be created automatically:
-- `program_results_output_encryption.txt` for encryption
-- `program_results_output_decryption.txt` for decryption
+- `program_results_output_encryption.txt` for encryption operation
+- `program_results_output_decryption.txt` for decryption operation
 
 Each output file lists the intermediate results for all DES rounds and ends with a line showing the final result, such as:
 ```
 Result = 85E813540F0AB405
 ```
+
+**The terminal will display a success message, or failure message, and the runtime for encryption or decryption operations.**
+
 ## Testing
 
 This project includes automated unit and integrated tests written with the pytest framework.  
