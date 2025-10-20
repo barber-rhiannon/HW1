@@ -18,6 +18,7 @@ The results will be found in ' program_results_output_decryption.txt OR program_
 '''
 
 import sys
+import time
 from des_tables import INITIAL_PERMUTATION, INVERSE_INITIAL_PERMUTATION, EXPANSION_TABLE, PBOX_PERMUTATION, PERMUTATION_CHOICE_1, PERMUTATION_CHOICE_2, KEY_SHIFTS_PER_ROUND, SBOXES
 
 
@@ -198,11 +199,16 @@ Output: Creates either program_results_output_encryption.txt or
 Purpose: Executes all of the DES steps (key generation, rounds, file I/O).
 '''
 
+import time
+
 def main():
 
     if len(sys.argv) != 2:
         print('To use this program, be sure to run the following command <python3 DES.py your_input_file.txt>')
         sys.exit(1)
+
+    start_time = time.time()
+
     inp = sys.argv[1]
     data, key, operation = read_input_file(inp)
     Cs, Ds, Ks_forward = generate_subkeys(key)
@@ -215,7 +221,8 @@ def main():
         else 'program_results_output_decryption.txt'
     )
     write_results_file(out_file, Cs, Ds, Ks, Ls, Rs, result_hex)
-    print('Success. The program has output the results to:', out_file)
 
-if __name__ == '__main__':
-    main()
+    end_time = time.time()
+    runtime = end_time - start_time
+    print('Success. The program has output the results to:', out_file)
+    print(f'Runtime: {runtime:.6f} seconds')

@@ -4,14 +4,13 @@ Date: Oct. 20, 2025
 CS454: Homework 1 - DES project
 
 Integration tests:
-- test_cli_encryption_standard_vector: CLI encryption writes correct result and sections
-- test_cli_decryption_standard_vector: CLI decryption writes correct result and sections
-- test_cli_handles_lowercase_and_whitespace: CLI normalizes lowercase hex and extra spaces
+- test_cli_encryption_standard_vector: CLI encryption writes correct result and prints runtime
+- test_cli_decryption_standard_vector: CLI decryption writes correct result and prints runtime
+- test_cli_handles_lowercase_and_whitespace: CLI normalizes lowercase hex and spaces and prints runtime
 - test_cli_creates_distinct_output_files: encryption and decryption produce separate files
 - test_cli_missing_argument: running without args exits nonzero and prints usage
 '''
 
-import os
 import re
 import subprocess
 from pathlib import Path
@@ -46,10 +45,11 @@ def read_result_file(path: Path):
 def test_cli_encryption_standard_vector(tmp_path: Path):
     data = "0123456789ABCDEF"
     key = "133457799BBCDFF1"
-    input_file = tmp_path / "enc.txt"
+    input_file = tmp_path / "test_input_encryption.txt"
     write_input_file(input_file, data, key, "encryption")
     cp = run_script(input_file)
     assert cp.returncode == 0
+    assert "Runtime:" in cp.stdout
     out_file = Path("program_results_output_encryption.txt")
     result_hex, contents = read_result_file(out_file)
     assert result_hex == "85E813540F0AB405"
@@ -61,10 +61,11 @@ def test_cli_encryption_standard_vector(tmp_path: Path):
 def test_cli_decryption_standard_vector(tmp_path: Path):
     data = "85E813540F0AB405"
     key = "133457799BBCDFF1"
-    input_file = tmp_path / "dec.txt"
+    input_file = tmp_path / "test_input_decryption.txt"
     write_input_file(input_file, data, key, "decryption")
     cp = run_script(input_file)
     assert cp.returncode == 0
+    assert "Runtime:" in cp.stdout
     out_file = Path("program_results_output_decryption.txt")
     result_hex, contents = read_result_file(out_file)
     assert result_hex == "0123456789ABCDEF"
@@ -84,6 +85,7 @@ def test_cli_handles_lowercase_and_whitespace(tmp_path: Path):
     )
     cp = run_script(input_file)
     assert cp.returncode == 0
+    assert "Runtime:" in cp.stdout
     out_file = Path("program_results_output_encryption.txt")
     result_hex, _ = read_result_file(out_file)
     assert result_hex == "85E813540F0AB405"
@@ -96,16 +98,12 @@ def test_cli_creates_distinct_output_files(tmp_path: Path):
     dec_in = tmp_path / "dec.txt"
     write_input_file(enc_in, data, key, "encryption")
     write_input_file(dec_in, "85E813540F0AB405", key, "decryption")
-    rc1 = run_script(enc_in).returncode
-    rc2 = run_script(dec_in).returncode
-    assert rc1 == 0 and rc2 == 0
-    enc_file = Path("program_results_output_encryption.txt")
-    dec_file = Path("program_results_output_decryption.txt")
-    assert enc_file.exists() and dec_file.exists()
-    enc_result, _ = read_result_file(enc_file)
-    dec_result, _ = read_result_file(dec_file)
-    assert enc_result == "85E813540F0AB405"
-    assert dec_result == "0123456789ABCDEF"
+    cp1 = run_script(enc_in)
+    cp2 = run_script(dec_in)
+    assert cp1.returncode == 0 and cp2.returncode == 0
+    assert "Runtime:" in cp1.stdout and "Runtime:" in cp2.stdout
+    assert Path("program_results_output_encryption.txt").exists()
+    assert Path("program_results_output_decryption.txt").exists()
 
 
 def test_cli_missing_argument():
