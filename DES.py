@@ -199,10 +199,7 @@ Output: Creates either program_results_output_encryption.txt or
 Purpose: Executes all of the DES steps (key generation, rounds, file I/O).
 '''
 
-import time
-
 def main():
-
     if len(sys.argv) != 2:
         print('To use this program, be sure to run the following command <python3 DES.py your_input_file.txt>')
         sys.exit(1)
@@ -215,14 +212,18 @@ def main():
     Ks = Ks_forward[::-1] if operation == 'decryption' else Ks_forward
     bits, Ls, Rs = des_rounds(data, Ks)
     result_hex = binary_to_hex(bits)
+
     out_file = (
         'program_results_output_encryption.txt'
         if operation == 'encryption'
         else 'program_results_output_decryption.txt'
     )
+
     write_results_file(out_file, Cs, Ds, Ks, Ls, Rs, result_hex)
 
     end_time = time.time()
     runtime = end_time - start_time
+
     print('Success. The program has output the results to:', out_file)
     print(f'Runtime: {runtime:.6f} seconds')
+    sys.stdout.flush()
