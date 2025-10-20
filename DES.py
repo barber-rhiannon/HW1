@@ -58,7 +58,11 @@ Purpose: Used in DES key schedule to rotate C and D halves each round.
 '''
 
 def circular_left_shift(bits, n):
+    if not bits:
+        return bits
+    n = n % len(bits)
     return bits[n:] + bits[:n]
+
 
 '''
 Performs S-box substitution on a 48-bit binary input.
