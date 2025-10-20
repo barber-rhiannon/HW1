@@ -59,5 +59,5 @@ They verify the correct functionality of both individual components of the DES i
 
 The project uses a GitHub workflow to run the testing suite for full automation. 
 
-**This project was tested with the files 'testing_input_dec.txt' and 'testing_input_enc.txt' to verify that the program can work with other files than the given files for the assignment. 
+**This project was tested with the files 'testing_input_dec.txt' and 'testing_input_enc.txt' to verify that the program can work with other files than the given files for the assignment.** 
 
