@@ -199,9 +199,6 @@ Output: Creates either program_results_output_encryption.txt or
 Purpose: Executes all of the DES steps (key generation, rounds, file I/O).
 '''
 
-import sys
-import time
-
 def main():
     if len(sys.argv) != 2:
         print('Usage: python3 DES.py <input_file>', file=sys.stderr)
